@@ -1,14 +1,16 @@
 # Required: enables the service
 services:
-- docker
+ - docker
 # Optionally, specify where you want your container built, I like to use the latest version of Linux
 dist: focal
 # Utilities
 env:
-global:
-- TZ=UTC
-- IMAGE_NAME="test/myTestImage"
+ global:
+  - TZ=UTC
+  - IMAGE_NAME="lss-image"
 # Version computation. Here dates are used instead of Semantic Versioning
 before_script:
-- export TAG="$(git describe || git log -n1 --date=format:'%Y-%m-%dT%H%M%S' --format=%cd)$(date +%Y-%m-%d_%H%M)"
+ - export TAG="$(git describe || git log -n1 --date=format:'%Y-%m-%dT%H%M%S' --format=%cd)$(date +%Y-%m-%d_%H%M)"
 
+script:
+ - docker build -t $IMAGE_NAME:latest -t $IMAGE_NAME:$TAG .
